@@ -4,7 +4,7 @@ import HelloWorld from './components/HelloWorld.vue'
 import { ref } from 'vue'
 import MultiSelect from './components/MultiSelect.vue'
 import { ingredients } from './data/ingredients_list.js'
-const fridge = ref([])
+import RecipeCard from './components/RecipeCard.vue'
 </script>
 
 <template>
@@ -35,17 +35,19 @@ const fridge = ref([])
           </div>
         </li>
       </ul>
-
     </div>
   </nav>
-  <div class="container py-4" style="max-width: 500px">
-    <h1 class="mb-3">What's in your fridge?</h1>
-    <MultiSelect v-model="fridge" :options="ingredients" placeholder="Pick ingredients" />
-  </div>
+  <main>
+    <RouterView />
+  </main>
 </template>
 
 <style>
 body {
   background-color: beige;
+}
+
+#search_recipe_btn {
+  margin-left: 45%;
 }
 </style>
