@@ -11,7 +11,7 @@ const recipe_list = ref([])
 
 function fetch_recipes() {
   const params = new URLSearchParams({
-    IncludeIngredients: fridge.value.join(''),
+    includeIngredients: fridge.value.join(','),
     sort: 'max-used-ingredients',
     fillIngredients: true,
     addRecipeInformation: true,
@@ -19,7 +19,6 @@ function fetch_recipes() {
     ignorePantry: true, //Ignores salt, pepper etc.
     number: 10,
     apiKey: apiUrl,
-
   })
   const url = `https://api.spoonacular.com/recipes/complexSearch?${params}`
   fetch(url)
