@@ -1,8 +1,8 @@
 <script setup>
-//import {recipe_list} from '../views/HomeView.vue'
-import { useRoute } from 'vue-router'
+import { RouterLink, useRoute } from 'vue-router'
 import { ref } from 'vue'
 
+defineOptions({ name: 'RecipeDetail' })
 
 const route = useRoute()
 const id = route.params.id
@@ -12,7 +12,6 @@ const url = `https://api.spoonacular.com/recipes/${id}/information?apiKey=${apiU
 fetch(url)
     .then(async (response) => {
         const data = await response.json()
-        console.log(data)
         if (!response.ok) {
             throw new Error(data.message || `Request failed with status ${response.status}`)
         }
@@ -24,59 +23,45 @@ fetch(url)
 </script>
 
 <template>
-    <div v-if="recipe">
-        <div class="recipe-header">
-            <h1>{{ recipe.title }}</h1>
-            <img :src="recipe.image" :alt="recipe.name" />
-            <h2 style="margin-left:40%; margin-top:15%;">Ingredients:</h2>
-        </div>
+    <div>
+        <RouterLink class="btn btn-outline-secondary mb-3" :to="{ name: 'home' }">
+            &larr; Back to recipes
+        </RouterLink>
 
-        <div class="row m-3">
-            <div v-for="ingredient in recipe.extendedIngredients" :key="ingredient.name" class="col-auto mb-3">
-                <div class="card border border-dark ingredient-card">
-                    <img :src="`https://img.spoonacular.com/ingredients_100x100/${ingredient.image}`"
-                        :alt="ingredient.name" class="card-img-top ingredient-image" />
-                    <div class="card-body">
-                        <p class="card-title">{{ ingredient.name }}</p>
-                        <p class="card-text">{{ ingredient.original }}</p>
+        <div v-if="recipe">
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <img :src="recipe.image" :alt="recipe.title" class="img-fluid rounded recipe-image" />
+                </div>
+                <div class="col-md-6">
+                    <h1>{{ recipe.title }}</h1>
+                </div>
+            </div>
+            <h2 class="h3 mb-3">Ingredients</h2>
+            <div class="row">
+                <div v-for="ingredient in recipe.extendedIngredients" :key="ingredient.name"
+                    class="col-sm-6 col-lg-4 mb-3">
+                    <div class="card h-100">
+                        <img :src="`https://img.spoonacular.com/ingredients_100x100/${ingredient.image}`"
+                            :alt="ingredient.name" class="card-img-top ingredient-image" />
+                        <div class="card-body">
+                            <h3 class="h5 card-title">{{ ingredient.name }}</h3>
+                            <p class="card-text">{{ ingredient.original }}</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
-
 </template>
 
-<style>
-.recipe-img {
-    width: 40%;
-    margin-left: 30%;
+<style scoped>
+.recipe-image {
+    max-height: 350px;
+    object-fit: cover;
 }
-
-.recipe-header h1 {
-    display: block;
-    margin-left: 25%;
-}
-
-.recipe-header img {
-    display: block;
-    margin-left: 30%;
-}
-
-.ingredient-card {
-    width: 18rem;
-    height: 24rem;
-}
-
 .ingredient-image {
-    width: 100%;
-    height: 10rem;
+    height: 140px;
     object-fit: contain;
-}
-
-.ingredient-card .card-body {
-    min-height: 0;
-    overflow-y: auto;
 }
 </style>
